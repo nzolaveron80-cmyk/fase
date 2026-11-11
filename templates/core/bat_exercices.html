@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>BAT et exercices</h1>
+<form method="get" class="filters">
+  <select name="promo">
+    <option value="">Toutes les promotions</option>
+    {% for p in promotions %}<option value="{{ p.code }}" {% if promo == p.code %}selected{% endif %}>{{ p.code }}</option>{% endfor %}
+  </select>
+  <select name="type">
+    <option value="">Tous les types</option>
+    <option value="Exercice" {% if type == 'Exercice' %}selected{% endif %}>Exercices</option>
+    <option value="BAT" {% if type == 'BAT' %}selected{% endif %}>BAT</option>
+  </select>
+  <button class="btn" type="submit">Filtrer</button>
+</form>
+<div class="list">
+  {% for it in items %}
+  <article class="card">
+    <span class="badge">{{ it.type }} · {{ it.promotion.code }}</span>
+    <h3>{{ it.titre }}</h3>
+    {% if it.description %}<p>{{ it.description }}</p>{% endif %}
+    <a class="btn" href="{{ it.fichier.url }}" download>Télécharger</a>
+  </article>
+  {% empty %}
+  <p>Aucun document pour ce filtre.</p>
+  {% endfor %}
+</div>
+{% endblock %}

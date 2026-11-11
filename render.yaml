@@ -1,0 +1,30 @@
+# Blueprint Render : configuration du service web FASE (Django + PostgreSQL Supabase)
+# Render lit ce fichier à la racine du dépôt GitHub.
+services:
+  - type: web
+    name: fase                       # l'adresse sera https://fase.onrender.com (si le nom est libre)
+    runtime: python
+    plan: starter                    # un plan payant est requis pour le disque persistant
+    region: frankfurt                # choisir la région la plus proche de la base Supabase
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate --noinput && gunicorn fase.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true          # généré automatiquement par Render, jamais écrit dans le code
+      - key: DJANGO_ALLOWED_HOSTS
+        value: fase.onrender.com     # à adapter si Render attribue un autre nom
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: https://fase.onrender.com
+      - key: DJANGO_MEDIA_ROOT
+        value: /var/data/media
+      - key: DATABASE_URL
+        sync: false                  # à saisir dans le tableau de bord (chaîne Supabase Session pooler)
+    disk:
+      name: fase-data
+      mountPath: /var/data
+      sizeGB: 1

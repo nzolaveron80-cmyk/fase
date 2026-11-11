@@ -1,0 +1,73 @@
+{% load static %}<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.nom }}{% endblock %} · {{ site.titre }}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{% url 'accueil' %}">
+      <img class="brand-logo" src="{% static 'img/logo-upc.svg' %}" alt="Logo UPC">
+      <span class="brand-text">
+        <strong>Université Protestante au Congo</strong>
+        <span>{{ site.nom }}</span>
+      </span>
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-controls="drawer" aria-expanded="false">
+      <span aria-hidden="true">&#9776;</span> Menu
+    </button>
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <strong>{{ site.titre }}</strong>
+      <span>« {{ site.devise }} »</span>
+    </div>
+    <nav>
+      <a href="{% url 'accueil' %}" class="{% if request.resolver_match.url_name == 'accueil' %}active{% endif %}">Accueil</a>
+      <a href="{% url 'cours' %}" class="{% if request.resolver_match.url_name == 'cours' %}active{% endif %}">Cours</a>
+      <a href="{% url 'responsables' %}" class="{% if request.resolver_match.url_name == 'responsables' %}active{% endif %}">Responsables</a>
+      <a href="{% url 'bat_exercices' %}" class="{% if request.resolver_match.url_name == 'bat_exercices' %}active{% endif %}">BAT et exercices</a>
+      <a href="{% url 'archives' %}" class="{% if request.resolver_match.url_name == 'archives' %}active{% endif %}">Archives</a>
+      <a href="{% url 'marketplace' %}" class="{% if request.resolver_match.url_name == 'marketplace' %}active{% endif %}">Marketplace</a>
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">Administration</a>{% endif %}
+    </nav>
+  </aside>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <strong>{{ site.nom }}</strong>
+        <p>{{ site.adresse }}</p>
+        <p>{{ site.permanence }}</p>
+      </div>
+      <div>
+        <p>Contact : <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+        {% if site.telephone %}<p>Tél. : {{ site.telephone }}</p>{% endif %}
+      </div>
+      <div>
+        <a href="{% url 'cgu' %}">CGU</a>
+        <a href="{% url 'confidentialite' %}">Confidentialité</a>
+        <a href="{% url 'cookies' %}">Cookies</a>
+        {% if user.is_staff %}<a href="{% url 'admin:index' %}">Administration</a>{% endif %}
+      </div>
+    </div>
+    <p class="copyright">© {% now "Y" %} FASE · UPC. Conception : Veron NZOLA.</p>
+  </footer>
+
+  <div class="cookie-banner" id="cookie-banner" hidden>
+    <p>Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. <a href="{% url 'cookies' %}">En savoir plus</a></p>
+    <button type="button" id="cookie-ok" class="btn">J'accepte</button>
+  </div>
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+</body>
+</html>

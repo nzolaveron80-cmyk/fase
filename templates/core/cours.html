@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Cours</h1>
+<form method="get" class="filters">
+  <select name="promo">
+    <option value="">Toutes les promotions</option>
+    {% for p in promotions %}<option value="{{ p.code }}" {% if promo == p.code %}selected{% endif %}>{{ p.code }}</option>{% endfor %}
+  </select>
+  <select name="semestre">
+    <option value="">Tous les semestres</option>
+    {% for s in semestres %}<option value="{{ s }}" {% if semestre == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+  <input type="search" name="q" value="{{ q }}" placeholder="Rechercher un cours, un code, un enseignant…">
+  <button class="btn" type="submit">Filtrer</button>
+</form>
+
+<div class="list">
+  {% for c in cours %}
+  <article class="card">
+    <span class="badge">{{ c.promotion.code }} · {{ c.semestre }}</span>
+    <h3>{{ c.code }} — {{ c.titre }}</h3>
+    <p class="muted">{% if c.prof %}Enseignant : {{ c.prof }}{% endif %}{% if c.horaire %} · {{ c.horaire }}{% endif %}{% if c.credits %} · {{ c.credits }} crédit(s){% endif %}</p>
+    {% if c.description %}<p>{{ c.description }}</p>{% endif %}
+    <ul class="files">
+      {% for f in c.fichiers.all %}
+        <li><a href="{{ f.fichier.url }}" download>{{ f.nom|default:f.fichier.name }}</a></li>
+      {% endfor %}
+      {% if c.lien_externe %}<li><a href="{{ c.lien_externe }}" target="_blank" rel="noopener">Lien externe</a></li>{% endif %}
+    </ul>
+  </article>
+  {% empty %}
+  <p>Aucun cours ne correspond à votre recherche.</p>
+  {% endfor %}
+</div>
+{% endblock %}

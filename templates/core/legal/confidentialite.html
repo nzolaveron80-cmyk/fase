@@ -1,0 +1,50 @@
+{% extends 'core/legal.html' %}
+{% block legal_body %}
+<p class="muted">Conformité avec le Code du numérique de la RDC (Ordonnance-loi n° 23/010 du 13 mars 2023).</p>
+
+<div class="notice">
+  <strong>Avis de conformité :</strong> cette politique décrit les traitements réels de données effectués par la FASE de l'UPC. Elle doit être validée par le service juridique de l'Université.
+</div>
+
+<section>
+  <h2>1. Responsable du traitement</h2>
+  <p>Le responsable du traitement des données est :</p>
+  <div class="box">
+    <p><strong>Organisme :</strong> Faculté d'Administration des Affaires et Sciences Économiques (FASE), Université Protestante au Congo (UPC)</p>
+    <p><strong>Représentée par :</strong> la Présidente de la FASE, en concertation avec le Décanat</p>
+    <p><strong>Adresse :</strong> Commune de Lingwala, Kinshasa, République Démocratique du Congo</p>
+    <p><strong>E-mail de contact :</strong> <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+  </div>
+</section>
+
+<section>
+  <h2>2. Données réellement collectées (minimisation stricte)</h2>
+  <p>Conformément au principe de minimisation des données :</p>
+  <ul>
+    <li><strong>Aucun compte étudiant requis :</strong> la consultation du site, la lecture des actualités et des archives et le téléchargement des supports de cours ne demandent ni création de compte, ni nom, ni identifiant étudiant.</li>
+    <li><strong>Coordonnées des chefs de promotion :</strong> les coordonnées des délégués publiées sur le site ne sont affichées qu'avec leur accord préalable et exprès, avec droit de retrait à tout moment.</li>
+    <li><strong>Espace d'administration :</strong> seuls les membres autorisés disposent d'un compte. La session de connexion est gérée par le framework du site, et les mots de passe sont stockés sous forme chiffrée.</li>
+    <li><strong>Cookies techniques uniquement :</strong> aucun traceur publicitaire ni profilage commercial n'est utilisé sur cette plateforme institutionnelle.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3. Finalités et base légale</h2>
+  <ul>
+    <li>Mise à disposition du matériel pédagogique et des annonces officielles (mission académique d'intérêt public de l'UPC).</li>
+    <li>Sécurisation des opérations administratives de publication (intérêt légitime de sécurité des systèmes d'information).</li>
+    <li>Conservation des archives académiques officielles de la faculté.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>4. Durée de conservation</h2>
+  <p>Les traces techniques de connexion sont purgées automatiquement. Les documents pédagogiques et annonces sont conservés pendant l'année académique en cours, puis versés aux archives officielles de la FASE.</p>
+</section>
+
+<section>
+  <h2>5. Vos droits</h2>
+  <p>Conformément à la législation congolaise sur le numérique, vous disposez d'un droit d'accès, d'information et de rectification. Adressez-vous directement au secrétariat de la faculté :</p>
+  <p>E-mail : <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+</section>
+{% endblock %}

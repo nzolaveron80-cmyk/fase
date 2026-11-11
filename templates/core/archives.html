@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Archives</h1>
+<p class="muted">Historique des années académiques antérieures.</p>
+<form method="get" class="filters">
+  <select name="annee">
+    <option value="">Toutes les années</option>
+    {% for a in annees %}<option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>{% endfor %}
+  </select>
+  <select name="categorie">
+    <option value="">Toutes les catégories</option>
+    {% for code, libelle in categories %}<option value="{{ code }}" {% if categorie == code %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+  </select>
+  <input type="search" name="q" value="{{ q }}" placeholder="Mot-clé…">
+  <button class="btn" type="submit">Filtrer</button>
+</form>
+<div class="grid">
+  {% for it in items %}
+  <article class="card">
+    <span class="badge">{{ it.get_type_display }} · {{ it.annee_academique }}</span>
+    <h3>{{ it.titre }}</h3>
+    <time>{{ it.date|date:"d M Y" }}</time>
+    {% if it.vignette %}<img class="cover" src="{{ it.vignette.url }}" alt="{{ it.titre }}">{% endif %}
+    {% if it.description %}<p>{{ it.description|truncatewords:50 }}</p>{% endif %}
+    {% if it.photos.all %}
+      <div class="album">{% for ph in it.photos.all %}<img src="{{ ph.image.url }}" alt="{{ ph.legende }}">{% endfor %}</div>
+    {% endif %}
+    {% if it.fichier %}<a class="btn" href="{{ it.fichier.url }}" download>Télécharger le document</a>{% endif %}
+  </article>
+  {% empty %}
+  <p>Aucune archive ne correspond à votre recherche.</p>
+  {% endfor %}
+</div>
+{% endblock %}

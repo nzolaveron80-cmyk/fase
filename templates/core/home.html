@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-logo"><img src="{% static 'img/logo-upc.svg' %}" alt="Logo UPC"></div>
+  <h1>Université Protestante au Congo</h1>
+  <h2 class="hero-sub">{{ site.nom }}</h2>
+  <p class="devise">{{ site.devise }}</p>
+  <p class="hero-text">Portail officiel pour les supports de cours, les épreuves types, les responsables académiques et le suivi des promotions.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="{% url 'cours' %}">Accéder aux cours</a>
+    <a class="btn btn-outline" href="{% url 'bat_exercices' %}">BAT et exercices</a>
+    <a class="btn btn-outline" href="{% url 'responsables' %}">Responsables</a>
+  </div>
+</section>
+
+{% if site.presidente %}
+<section class="card president">
+  {% if site.photo_presidente %}
+    <img class="president-photo" src="{{ site.photo_presidente.url }}" alt="{{ site.presidente }}">
+  {% endif %}
+  <div>
+    <span class="badge">Présidente de la FASE</span>
+    <h3 class="president-name">{{ site.presidente }}</h3>
+    {% if site.citation_presidente %}<p class="president-quote">« {{ site.citation_presidente }} »</p>{% endif %}
+    <a class="link-arrow" href="{% url 'responsables' %}">Voir l'équipe des responsables &rsaquo;</a>
+  </div>
+</section>
+{% endif %}
+
+{% if site.mot_presidente %}
+<section class="card wide">
+  <h2>Mot de la {{ site.presidente|default:"présidente" }}</h2>
+  <p>{{ site.mot_presidente|linebreaksbr }}</p>
+</section>
+{% endif %}
+
+<!-- ============ CITATIONS ============ -->
+<section class="section-block">
+  <h2 class="section-title">Citations académiques</h2>
+  <p class="section-sub">Les repères intellectuels, éthiques et pédagogiques qui guident la communauté facultaire.</p>
+  <div class="grid">
+    {% for c in citations %}
+    <blockquote class="card quote-card">
+      <p>« {{ c.texte }} »</p>
+      <cite>{{ c.auteur }}{% if c.fonction %}<span class="muted"> · {{ c.fonction }}</span>{% endif %}</cite>
+    </blockquote>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ============ ACTUALITÉS ============ -->
+<section class="section-block">
+  <p class="eyebrow">Informations officielles</p>
+  <h2 class="section-title">Actualités de la faculté</h2>
+  <p class="section-sub">Annonces officielles, calendriers et temps forts de la FASE en cours.</p>
+
+  <div class="tabs">
+    <a href="?filtre=tout" class="{% if filtre == 'tout' %}active{% endif %}">Tout ({{ counts.tout }})</a>
+    <a href="?filtre=evenements" class="{% if filtre == 'evenements' %}active{% endif %}">Événements ({{ counts.evenements }})</a>
+    <a href="?filtre=communiques" class="{% if filtre == 'communiques' %}active{% endif %}">Communiqués ({{ counts.communiques }})</a>
+  </div>
+
+  <div class="grid">
+    {% for a in actus %}
+    <article class="card">
+      <span class="badge">{{ a.type }}</span>
+      <h3>{{ a.titre }}</h3>
+      <time>{{ a.date|date:"d M Y" }}</time>
+      {% if a.image %}<img src="{{ a.image.url }}" alt="{{ a.titre }}" class="cover">{% endif %}
+      <p>{{ a.texte|truncatewords:40 }}</p>
+    </article>
+    {% empty %}
+    <p class="empty">Aucune actualité active dans cette catégorie pour le moment.</p>
+    {% endfor %}
+  </div>
+
+  <div class="card archive-cta">
+    <div>
+      <p class="eyebrow">Consulter l'archive des années antérieures</p>
+      <h3>Vous cherchez une ancienne publication ou un document officiel ?</h3>
+      <p class="muted">Toutes les annonces passées, albums photos et textes officiels sont conservés dans l'Archive.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'archives' %}">Accéder à l'Archive</a>
+  </div>
+</section>
+
+<!-- ============ DÉLÉGATIONS ============ -->
+<section class="section-block">
+  <p class="eyebrow">Délégations estudiantines</p>
+  <h2 class="section-title">Les chefs de promotion</h2>
+  <p class="section-sub">Vos délégués de promotion sont vos interlocuteurs privilégiés pour relayer vos attentes auprès du corps professoral et faciliter l'accès aux cours.</p>
+
+  <div class="grid">
+    {% for p in promotions %}
+    <article class="card promo-card">
+      <span class="badge badge-outline">{{ p.code }} {{ p.annee_academique }}</span>
+      {% for d in p.delegues.all %}
+        <p class="eyebrow eyebrow-sm">{{ d.get_role_display }}</p>
+        <h3>{{ d.nom }}</h3>
+        {% if d.message %}<p class="muted">{{ d.message }}</p>{% endif %}
+        {% if d.afficher_contact and d.email %}
+          <p><a href="mailto:{{ d.email }}">{{ d.email }}</a></p>
+        {% elif not d.afficher_contact %}
+          <p class="muted small">Contact protégé</p>
+        {% endif %}
+      {% empty %}
+        <p class="eyebrow eyebrow-sm">Chef de promotion</p>
+        <h3>À désigner</h3>
+      {% endfor %}
+      {% if p.nom %}<p class="muted small">{{ p.nom }}</p>{% endif %}
+      <p class="muted small">Délégué officiel de promotion.</p>
+      <a class="btn btn-outline" href="{% url 'cours' %}?promo={{ p.code }}">Cours {{ p.code }}</a>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="center-action">
+    <a class="btn btn-primary" href="{% url 'cours' %}">Accéder à tous les cours</a>
+  </div>
+</section>
+
+<!-- ============ SECRÉTARIAT ============ -->
+<section class="section-block">
+  <p class="eyebrow">Secrétariat et décanat</p>
+  <h2 class="section-title">Contacts académiques et Secrétariat</h2>
+  <p class="section-sub">Les bureaux de la faculté vous accueillent pour vos démarches administratives, inscriptions et attestations.</p>
+
+  <div class="grid two-cols">
+    <article class="card">
+      <h3>Secrétariat général de la faculté</h3>
+      <p class="muted">{{ site.permanence }}</p>
+      <p>{{ site.email_secretariat|default:"À renseigner" }}</p>
+      <p>{{ site.telephone_secretariat|default:"À renseigner" }}</p>
+    </article>
+    <article class="card">
+      <h3>Présidence et coordination</h3>
+      <p class="muted">Permanence d'écoute et d'accompagnement des étudiants sur rendez-vous ou aux heures fixées au décanat.</p>
+      <p>{{ site.email|default:"À renseigner" }}</p>
+      <p>{{ site.telephone|default:"À renseigner" }}</p>
+    </article>
+  </div>
+</section>
+
+{% endblock %}

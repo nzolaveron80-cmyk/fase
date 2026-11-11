@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Responsables</h1>
+{% for libelle, items in groupes %}
+<section>
+  <h2>{{ libelle }}</h2>
+  <div class="grid">
+    {% for r in items %}
+    <article class="card person">
+      {% if r.photo %}<img class="avatar" src="{{ r.photo.url }}" alt="{{ r.nom }}">{% endif %}
+      <h3>{% if r.titre_academique %}{{ r.titre_academique }} {% endif %}{{ r.nom }}</h3>
+      <p class="muted">{{ r.fonction }}</p>
+      {% if r.biographie %}<p>{{ r.biographie }}</p>{% endif %}
+      <ul class="meta">
+        {% if r.bureau %}<li>Bureau : {{ r.bureau }}</li>{% endif %}
+        {% if r.email %}<li><a href="mailto:{{ r.email }}">{{ r.email }}</a></li>{% endif %}
+        {% if r.telephone %}<li>{{ r.telephone }}</li>{% endif %}
+      </ul>
+      <div class="socials">
+        {% if r.linkedin_url %}<a href="{{ r.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
+        {% if r.facebook_url %}<a href="{{ r.facebook_url }}" target="_blank" rel="noopener">Facebook</a>{% endif %}
+        {% if r.x_url %}<a href="{{ r.x_url }}" target="_blank" rel="noopener">X</a>{% endif %}
+        {% if r.youtube_url %}<a href="{{ r.youtube_url }}" target="_blank" rel="noopener">YouTube</a>{% endif %}
+        {% if r.instagram_url %}<a href="{{ r.instagram_url }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% empty %}
+<p>Aucun responsable publié.</p>
+{% endfor %}
+{% endblock %}

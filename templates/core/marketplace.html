@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Marketplace étudiant</h1>
+<form method="get" class="filters">
+  <select name="type">
+    <option value="">Produits et services</option>
+    <option value="produit" {% if type == 'produit' %}selected{% endif %}>Produits</option>
+    <option value="service" {% if type == 'service' %}selected{% endif %}>Services</option>
+  </select>
+  <button class="btn" type="submit">Filtrer</button>
+</form>
+<div class="grid">
+  {% for it in items %}
+  <article class="card">
+    <span class="badge">{{ it.get_type_display }}</span>
+    {% if it.photo %}<img class="cover" src="{{ it.photo.url }}" alt="{{ it.titre }}">{% endif %}
+    <h3>{{ it.titre }}</h3>
+    <p>{{ it.description|truncatewords:40 }}</p>
+    {% if it.prix %}<p><strong>{{ it.prix }}</strong></p>{% endif %}
+    <p class="muted">{{ it.vendeur_nom }}{% if it.vendeur_promotion %} · {{ it.vendeur_promotion }}{% endif %}</p>
+    <a class="btn" target="_blank" rel="noopener"
+       href="https://wa.me/{{ it.vendeur_whatsapp|cut:'+'|cut:' ' }}?text={{ it.titre|urlencode }}">Contacter sur WhatsApp</a>
+  </article>
+  {% empty %}
+  <p>Aucune annonce disponible.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -44,4 +44,13 @@ Variable optionnelle `DJANGO_BACKUP_DIR` pour choisir le dossier de sauvegarde.
 
 N'appelez pas l'environnement virtuel `.env` : ce nom est réservé au fichier de configuration.
 Utilisez `.venv` (ce nom est déjà ignoré par Git).
-# fase
+
+## Déploiement sur Render (Supabase PostgreSQL)
+
+1. Pousser le dépôt sur GitHub (le fichier `render.yaml` est à la racine).
+2. Sur render.com : **New +** > **Blueprint**, puis choisir le dépôt.
+3. Renseigner `DATABASE_URL` dans les variables du service (chaîne **Session pooler** de Supabase, avec le mot de passe de la base). Ne jamais la mettre dans le code ni dans Git.
+4. Valider : Render construit l'application, applique les migrations et démarre Gunicorn.
+5. Créer l'administrateur depuis l'onglet **Shell** : `python manage.py createsuperuser`.
+
+Le dossier `Dockerfile` concerne uniquement Cloud Run, pas Render.
