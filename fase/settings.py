@@ -123,24 +123,19 @@ if CLOUD_SQL_CONNECTION_NAME:
         }
     }
 elif DATABASE_URL:
-    # PostgreSQL (ex. Render) : l'adresse est fournie par l'hébergeur
+    # PostgreSQL (Supabase) : l'adresse est fournie par l'hébergeur
     import dj_database_url
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL, conn_max_age=int(os.environ.get("DB_CONN_MAX_AGE", "60"))
-        )
-    }
-    # Supabase et la plupart des bases managées exigent une connexion chiffrée
-    DATABASES["default"].setdefault("OPTIONS", {})["sslmode"] = os.environ.get("DB_SSLMODE", "require")
-else:
-    # SQLite (développement, PythonAnywhere)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
-            "OPTIONS": {"timeout": 20},
+    try:
+        DATABASES = {
+            "default": dj_database_url.parse(
+                DATABASE_URL, conn_max_age=int(os.environ.get("DB_CONN_MAX_AGE", "60"))
+            )
         }
-    }
+    except Exception:
+        # Ne pas afficher l'URL (elle contient le mot de passe)
+        raise ImproperlyConfigured(
+            "DATABASE_URL est invalide. ..."
+        ) from None
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
