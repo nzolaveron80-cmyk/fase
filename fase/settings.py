@@ -158,32 +158,30 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(os.environ.get("DJANGO_MEDIA_ROOT", BASE_DIR / "media"))
 S3_BUCKET = os.environ.get("S3_BUCKET_NAME", "")
-if S3_BUCKET:
+S3_ENDPOINT = os.environ.get("S3_ENDPOINT_URL", "")
+S3_KEY = os.environ.get("S3_ACCESS_KEY_ID", "")
+S3_SECRET = os.environ.get("S3_SECRET_ACCESS_KEY", "")
+S3_DOMAIN = os.environ.get("S3_PUBLIC_DOMAIN", "")
+
+# Stockage S3 (Supabase) activé seulement si toutes les variables sont présentes
+USE_S3 = all([S3_BUCKET, S3_ENDPOINT, S3_KEY, S3_SECRET, S3_DOMAIN])
+if USE_S3:
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3.S3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
     }
     AWS_STORAGE_BUCKET_NAME = S3_BUCKET
-    AWS_S3_ENDPOINT_URL = os.environ["S3_ENDPOINT_URL"]
+    AWS_S3_ENDPOINT_URL = S3_ENDPOINT
     AWS_S3_REGION_NAME = os.environ.get("S3_REGION", "eu-west-3")
-    AWS_ACCESS_KEY_ID = os.environ["S3_ACCESS_KEY_ID"]
-    AWS_SECRET_ACCESS_KEY = os.environ["S3_SECRET_ACCESS_KEY"]
-    AWS_S3_CUSTOM_DOMAIN = os.environ["S3_PUBLIC_DOMAIN"]
+    AWS_ACCESS_KEY_ID = S3_KEY
+    AWS_SECRET_ACCESS_KEY = S3_SECRET
+    AWS_S3_CUSTOM_DOMAIN = S3_DOMAIN
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = None
     AWS_S3_FILE_OVERWRITE = False
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    MEDIA_URL = f"https://{S3_DOMAIN}/"
 
-# Fichiers servis par Django seulement si aucun stockage externe n'est configuré
-SERVE_MEDIA_LOCALLY = not S3_BUCKET
-# Fichiers servis par Django seulement si aucun stockage externe n'est configuré
-SERVE_MEDIA_LOCALLY = not R2_BUCKET_NAME
-
-# Les fichiers sont servis par Django seulement si on n'utilise pas Cloud Storage
-SERVE_MEDIA_LOCALLY = not GS_BUCKET_NAME
-
-# Limite d'envoi (images et documents) : 10 Mo
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+# Fichiers servis par Django seulement si le stockage S3 n'est pas configuré
+SERVE_MEDIA_LOCALLY = not USE_S3
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
