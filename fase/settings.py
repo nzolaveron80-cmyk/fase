@@ -157,17 +157,27 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(os.environ.get("DJANGO_MEDIA_ROOT", BASE_DIR / "media"))
-
-GS_BUCKET_NAME = os.environ.get("GS_BUCKET_NAME", "")
-if GS_BUCKET_NAME:
-    # Google Cloud Storage : photos et documents (Cloud Run n'a pas de disque durable)
+S3_BUCKET = os.environ.get("S3_BUCKET_NAME", "")
+if S3_BUCKET:
     STORAGES = {
-        "default": {"BACKEND": "storages.backends.gcloud.GoogleCloudStorage"},
+        "default": {"BACKEND": "storages.backends.s3.S3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
     }
-    GS_QUERYSTRING_AUTH = False
-    GS_DEFAULT_ACL = None  # accès géré au niveau du bucket (uniform access)
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    AWS_STORAGE_BUCKET_NAME = S3_BUCKET
+    AWS_S3_ENDPOINT_URL = os.environ["S3_ENDPOINT_URL"]
+    AWS_S3_REGION_NAME = os.environ.get("S3_REGION", "eu-west-3")
+    AWS_ACCESS_KEY_ID = os.environ["S3_ACCESS_KEY_ID"]
+    AWS_SECRET_ACCESS_KEY = os.environ["S3_SECRET_ACCESS_KEY"]
+    AWS_S3_CUSTOM_DOMAIN = os.environ["S3_PUBLIC_DOMAIN"]
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+
+# Fichiers servis par Django seulement si aucun stockage externe n'est configuré
+SERVE_MEDIA_LOCALLY = not S3_BUCKET
+# Fichiers servis par Django seulement si aucun stockage externe n'est configuré
+SERVE_MEDIA_LOCALLY = not R2_BUCKET_NAME
 
 # Les fichiers sont servis par Django seulement si on n'utilise pas Cloud Storage
 SERVE_MEDIA_LOCALLY = not GS_BUCKET_NAME
