@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}BAT et exercices{% endblock %}
+{% block content %}
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Épreuves et entraînement</span>
+      <h1>BAT et exercices</h1>
+      <p>Épreuves types, travaux pratiques et exercices corrigés, par promotion.</p>
+    </div>
+
+    <div class="toolbar">
+      <nav class="segmented" aria-label="Promotion">
+        <a href="?{% if type %}type={{ type|urlencode }}{% endif %}" class="{% if not promo %}is-active{% endif %}">Toutes</a>
+        {% for p in promotions %}
+        <a href="?promo={{ p.code }}{% if type %}&amp;type={{ type|urlencode }}{% endif %}" class="{% if promo == p.code %}is-active{% endif %}">{{ p.code }}</a>
+        {% endfor %}
+      </nav>
+      <nav class="segmented" aria-label="Type de document">
+        <a href="?{% if promo %}promo={{ promo|urlencode }}{% endif %}" class="{% if not type %}is-active{% endif %}">Tous</a>
+        <a href="?type=Exercice{% if promo %}&amp;promo={{ promo|urlencode }}{% endif %}" class="{% if type == 'Exercice' %}is-active{% endif %}">Exercices</a>
+        <a href="?type=BAT{% if promo %}&amp;promo={{ promo|urlencode }}{% endif %}" class="{% if type == 'BAT' %}is-active{% endif %}">BAT</a>
+      </nav>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th scope="col">Titre</th><th scope="col">Type</th><th scope="col">Promotion</th><th scope="col">Document</th></tr></thead>
+        <tbody>
+          {% for it in items %}
+          <tr>
+            <td>
+              <strong>{{ it.titre }}</strong>
+              {% if it.description %}<div class="small muted">{{ it.description }}</div>{% endif %}
+            </td>
+            <td><span class="badge {% if it.type == 'BAT' %}accent{% else %}primary{% endif %}">{{ it.get_type_display|default:it.type }}</span></td>
+            <td>{{ it.promotion.code }}</td>
+            <td><a class="link-doc" href="{{ it.fichier.url }}" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              Télécharger</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4"><div class="empty"><strong>Aucun document</strong>Aucun document pour ce filtre.</div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

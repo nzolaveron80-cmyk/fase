@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%">
+  <rect width="240" height="240" fill="#000000" rx="8" />
+  <!-- 2x2 Grid of UPC squares -->
+  <g transform="translate(30, 25)">
+    <!-- Top Left: Red U -->
+    <rect x="0" y="0" width="68" height="88" fill="#b3261e" rx="3" />
+    <text x="34" y="66" fill="#fff9eb" font-family="'Bodoni Moda', 'Georgia', serif" font-size="74" font-weight="700" text-anchor="middle">U</text>
+
+    <!-- Top Right: Yellow P -->
+    <rect x="80" y="0" width="68" height="88" fill="#f4a300" rx="3" />
+    <text x="114" y="66" fill="#fff9eb" font-family="'Bodoni Moda', 'Georgia', serif" font-size="74" font-weight="700" text-anchor="middle">P</text>
+
+    <!-- Bottom Left: Blue C -->
+    <rect x="0" y="98" width="68" height="88" fill="#1c5fa0" rx="3" />
+    <text x="34" y="164" fill="#fff9eb" font-family="'Bodoni Moda', 'Georgia', serif" font-size="74" font-weight="700" text-anchor="middle">C</text>
+
+    <!-- Bottom Right: Sunburst / Knowledge emblem -->
+    <rect x="80" y="98" width="68" height="88" fill="#0c111c" rx="3" />
+    <path d="M 80 98 L 148 98 L 148 104 L 86 104 L 86 186 L 80 186 Z" fill="#b3261e" />
+    <path d="M 84 102 L 148 102 L 148 106 L 88 106 L 88 186 L 84 186 Z" fill="#1c5fa0" />
+    <!-- Radiating rays from top-left of this square -->
+    <path d="M 88 106 L 148 116 L 148 126 Z" fill="#e27c1d" />
+    <path d="M 88 106 L 148 128 L 148 140 Z" fill="#f4a300" />
+    <path d="M 88 106 L 148 142 L 148 156 Z" fill="#fbc558" />
+    <path d="M 88 106 L 148 158 L 148 174 Z" fill="#fde3a7" />
+    <path d="M 88 106 L 148 176 L 142 186 L 128 186 Z" fill="#e69628" />
+    <path d="M 88 106 L 126 186 L 112 186 Z" fill="#d2581a" />
+    <path d="M 88 106 L 110 186 L 96 186 Z" fill="#b3261e" />
+  </g>
+  <!-- Motto on the right -->
+  <text x="195" y="115" fill="#5aa6e6" font-family="'Source Sans 3', sans-serif" font-size="12" font-weight="600" letter-spacing="1.5" transform="rotate(90 195 115)" text-anchor="middle">
+    Vérité. Foi. Liberté.
+  </text>
+</svg>

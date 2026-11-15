@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Cours{% endblock %}
+{% block content %}
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Supports pédagogiques</span>
+      <h1>Trouver mes cours</h1>
+      <p>Choisissez votre promotion, puis filtrez par semestre ou recherchez un cours ou un enseignant.</p>
+    </div>
+
+    <div class="toolbar">
+      <nav class="segmented" aria-label="Promotion">
+        <a href="?{% if semestre %}semestre={{ semestre|urlencode }}&amp;{% endif %}{% if q %}q={{ q|urlencode }}{% endif %}" class="{% if not promo %}is-active{% endif %}">Toutes</a>
+        {% for p in promotions %}
+        <a href="?promo={{ p.code }}{% if semestre %}&amp;semestre={{ semestre|urlencode }}{% endif %}{% if q %}&amp;q={{ q|urlencode }}{% endif %}" class="{% if promo == p.code %}is-active{% endif %}" {% if promo == p.code %}aria-current="true"{% endif %}>{{ p.code }}</a>
+        {% endfor %}
+      </nav>
+
+      <form method="get" class="filters">
+        {% if promo %}<input type="hidden" name="promo" value="{{ promo }}">{% endif %}
+        <select name="semestre" aria-label="Filtrer par semestre">
+          <option value="">Tous les semestres</option>
+          {% for s in semestres %}<option value="{{ s }}" {% if semestre == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+        </select>
+        <div class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="search" name="q" value="{{ q }}" placeholder="Cours ou enseignant…" aria-label="Rechercher un cours">
+        </div>
+        <button class="btn btn-primary btn-sm" type="submit">Filtrer</button>
+      </form>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th scope="col">Cours</th><th scope="col">Enseignant</th><th scope="col">Semestre</th><th scope="col">Documents</th></tr>
+        </thead>
+        <tbody>
+          {% for c in cours %}
+          <tr>
+            <td>
+              <strong>{{ c.code }} · {{ c.titre }}</strong>
+              {% if c.horaire %}<div class="small muted">{{ c.horaire }}</div>{% endif %}
+              {% if c.description %}<div class="small muted">{{ c.description }}</div>{% endif %}
+            </td>
+            <td class="muted">{{ c.prof|default:"—" }}</td>
+            <td><span class="badge">{{ c.semestre }}</span></td>
+            <td>
+              <ul class="doc-list">
+                {% for f in c.fichiers.all %}
+                  <li><a class="link-doc" href="{{ f.fichier.url }}" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+                    {{ f.nom|default:f.fichier.name }}</a></li>
+                {% endfor %}
+                {% if c.lien_externe %}<li><a class="link-doc" href="{{ c.lien_externe }}" target="_blank" rel="noopener">Lien externe</a></li>{% endif %}
+                {% if not c.fichiers.all and not c.lien_externe %}<li class="muted small">Document à venir</li>{% endif %}
+              </ul>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4"><div class="empty"><strong>Aucun cours trouvé</strong>Essayez une autre recherche ou un autre semestre.</div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

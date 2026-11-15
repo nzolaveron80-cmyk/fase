@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Archives{% endblock %}
+{% block content %}
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Mémoire de la faculté</span>
+      <h1>Archives</h1>
+      <p>Publications et documents officiels des années antérieures.</p>
+    </div>
+
+    <form method="get" class="toolbar filters">
+      <select name="annee" aria-label="Filtrer par année">
+        <option value="">Toutes les années</option>
+        {% for a in annees %}<option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>{% endfor %}
+      </select>
+      <select name="categorie" aria-label="Filtrer par catégorie">
+        <option value="">Toutes les catégories</option>
+        {% for code, libelle in categories %}<option value="{{ code }}" {% if categorie == code %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+      </select>
+      <div class="field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" value="{{ q }}" placeholder="Mot-clé…" aria-label="Rechercher dans les archives">
+      </div>
+      <button class="btn btn-primary btn-sm" type="submit">Filtrer</button>
+    </form>
+
+    <div class="grid-2">
+      {% for it in items %}
+      <article class="card interactive news reveal">
+        {% if it.vignette %}<img class="cover" src="{{ it.vignette.url }}" alt="{{ it.titre }}" loading="lazy">{% endif %}
+        <div class="news-meta">
+          <span class="badge primary">{{ it.get_type_display }}</span>
+          <span>{{ it.annee_academique }}</span>
+          <time datetime="{{ it.date|date:'Y-m-d' }}">{{ it.date|date:"d M Y" }}</time>
+        </div>
+        <h3>{{ it.titre }}</h3>
+        {% if it.description %}<p>{{ it.description|truncatewords:50 }}</p>{% endif %}
+        {% if it.photos.all %}
+        <div class="album">
+          {% for ph in it.photos.all %}<img src="{{ ph.image.url }}" alt="{{ ph.legende|default:it.titre }}" loading="lazy">{% endfor %}
+        </div>
+        {% endif %}
+        {% if it.fichier %}
+        <a class="link-doc" href="{{ it.fichier.url }}" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+          Télécharger le document</a>
+        {% endif %}
+      </article>
+      {% empty %}
+      <div class="empty card span-all"><strong>Aucune archive trouvée</strong>Essayez d'autres critères de recherche.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

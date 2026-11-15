@@ -1,0 +1,11 @@
+# Secrets et données locales : ne jamais publier
+.env
+db.sqlite3
+backups/
+media/
+staticfiles/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

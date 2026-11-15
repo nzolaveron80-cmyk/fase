@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">« {{ site.devise }} »</p>
+    <h1>Votre portail académique, simple et à jour.</h1>
+    <p class="lead">Cours par promotion, actualités officielles, épreuves types, responsables et archives : tout ce dont vous avez besoin, au même endroit.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="{% url 'cours' %}">Trouver mes cours
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="{% url 'bat_exercices' %}">BAT et exercices</a>
+      <a class="btn btn-ghost" href="{% url 'responsables' %}">Responsables</a>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><strong>L1 → M2</strong><span>Toutes les promotions</span></div>
+      <div class="stat"><strong>PDF</strong><span>Supports téléchargeables</span></div>
+      <div class="stat"><strong>24/7</strong><span>Accès en ligne</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRÉSIDENTE ============ -->
+{% if site.presidente %}
+<section class="block">
+  <div class="container presidente">
+    <div class="reveal">
+      {% if site.photo_presidente %}
+        <img class="presidente-photo" src="{{ site.photo_presidente.url }}" alt="{{ site.presidente }}" loading="lazy">
+      {% else %}
+        <div class="presidente-photo placeholder" aria-hidden="true">Photo</div>
+      {% endif %}
+    </div>
+    <div class="reveal reveal-delay-1">
+      <span class="badge primary">Présidente de la FASE</span>
+      <h2 class="spaced">{{ site.presidente }}</h2>
+      {% if site.citation_presidente %}<p class="quote">« {{ site.citation_presidente }} »</p>{% endif %}
+      {% if site.mot_presidente %}<p class="muted">{{ site.mot_presidente|linebreaksbr }}</p>{% endif %}
+      <a class="btn btn-ghost btn-sm" href="{% url 'responsables' %}">Voir l'équipe des responsables</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ CITATIONS ============ -->
+{% if citations %}
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Repères</span>
+      <h2>Citations académiques</h2>
+      <p>Les repères intellectuels, éthiques et pédagogiques qui guident la communauté facultaire.</p>
+    </div>
+    <div class="grid-3">
+      {% for c in citations %}
+      <blockquote class="card quote-card reveal reveal-delay-{{ forloop.counter }}">
+        <p>« {{ c.texte }} »</p>
+        <cite>{{ c.auteur }}{% if c.fonction %}<span class="muted"> · {{ c.fonction }}</span>{% endif %}</cite>
+      </blockquote>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ ACTUALITÉS ============ -->
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Informations officielles</span>
+      <h2>Actualités de la faculté</h2>
+      <p>Annonces officielles, calendriers et temps forts de la FASE en cours.</p>
+    </div>
+
+    <div class="toolbar">
+      <nav class="segmented" aria-label="Type d'actualité">
+        <a href="?filtre=tout" class="{% if filtre == 'tout' %}is-active{% endif %}" {% if filtre == 'tout' %}aria-current="true"{% endif %}>Tout <span class="count">{{ counts.tout }}</span></a>
+        <a href="?filtre=evenements" class="{% if filtre == 'evenements' %}is-active{% endif %}" {% if filtre == 'evenements' %}aria-current="true"{% endif %}>Événements <span class="count">{{ counts.evenements }}</span></a>
+        <a href="?filtre=communiques" class="{% if filtre == 'communiques' %}is-active{% endif %}" {% if filtre == 'communiques' %}aria-current="true"{% endif %}>Communiqués <span class="count">{{ counts.communiques }}</span></a>
+      </nav>
+    </div>
+
+    <div class="grid-2">
+      {% for a in actus %}
+      <article class="card interactive news reveal">
+        {% if a.image %}
+          <img class="cover" src="{{ a.image.url }}" alt="{{ a.titre }}" loading="lazy">
+        {% endif %}
+        <div class="news-meta">
+          <span class="badge {% if a.type == 'Événement' %}primary{% else %}accent{% endif %}">{{ a.type }}</span>
+          <time datetime="{{ a.date|date:'Y-m-d' }}">{{ a.date|date:"d M Y" }}</time>
+        </div>
+        <h3>{{ a.titre }}</h3>
+        <p>{{ a.texte|truncatewords:40 }}</p>
+      </article>
+      {% empty %}
+      <div class="empty card span-all">
+        <strong>Aucune actualité</strong>
+        Rien à afficher dans cette catégorie pour le moment.
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="card cta-card reveal">
+      <div>
+        <p class="eyebrow inline">Archives</p>
+        <h3>Vous cherchez une ancienne publication ou un document officiel ?</h3>
+        <p class="muted">Les annonces passées, albums photos et textes officiels sont conservés dans l'archive.</p>
+      </div>
+      <a class="btn btn-primary" href="{% url 'archives' %}">Accéder à l'archive</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DÉLÉGUÉS ============ -->
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Délégations étudiantes</span>
+      <h2>Les chefs de promotion</h2>
+      <p>Vos délégués sont vos interlocuteurs privilégiés pour relayer vos attentes auprès du corps professoral.</p>
+    </div>
+    <div class="grid-3">
+      {% for p in promotions %}
+      <article class="card interactive promo-card reveal">
+        <div class="promo-head">
+          <span class="badge primary">{{ p.code }}</span>
+          {% if p.annee_academique %}<span class="small muted">{{ p.annee_academique }}</span>{% endif %}
+        </div>
+        {% if p.nom %}<span class="small muted">{{ p.nom }}</span>{% endif %}
+        {% for d in p.delegues.all %}
+          <span class="small muted">{{ d.get_role_display }}</span>
+          <strong>{{ d.nom }}</strong>
+          {% if d.message %}<p class="muted small">{{ d.message }}</p>{% endif %}
+          {% if d.afficher_contact and d.email %}
+            <a class="small" href="mailto:{{ d.email }}">{{ d.email }}</a>
+          {% elif not d.afficher_contact %}
+            <span class="small muted">Contact protégé</span>
+          {% endif %}
+        {% empty %}
+          <span class="small muted">Chef de promotion</span>
+          <strong class="pending">À désigner</strong>
+        {% endfor %}
+        <a class="more" href="{% url 'cours' %}?promo={{ p.code }}">Voir les cours {{ p.code }} →</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Responsables{% endblock %}
+{% block content %}
+<section class="block">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow inline">Équipe</span>
+      <h1>Responsables</h1>
+      <p>L'équipe académique et administrative de la faculté.</p>
+    </div>
+
+    {% for libelle, items in groupes %}
+    <h2 class="group-title reveal">{{ libelle }}</h2>
+    <div class="grid-3">
+      {% for r in items %}
+      <article class="card interactive person reveal">
+        {% if r.photo %}
+          <img class="avatar" src="{{ r.photo.url }}" alt="{{ r.nom }}" loading="lazy">
+        {% else %}
+          <div class="avatar placeholder" aria-hidden="true">Photo</div>
+        {% endif %}
+        <strong>{% if r.titre_academique %}{{ r.titre_academique }} {% endif %}{{ r.nom }}</strong>
+        <span class="small muted">{{ r.fonction }}</span>
+        {% if r.biographie %}<p class="small">{{ r.biographie }}</p>{% endif %}
+        <ul class="meta">
+          {% if r.bureau %}<li>Bureau : {{ r.bureau }}</li>{% endif %}
+          {% if r.email %}<li><a href="mailto:{{ r.email }}">{{ r.email }}</a></li>{% endif %}
+          {% if r.telephone %}<li>{{ r.telephone }}</li>{% endif %}
+        </ul>
+        <div class="socials">
+          {% if r.linkedin_url %}<a href="{{ r.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
+          {% if r.facebook_url %}<a href="{{ r.facebook_url }}" target="_blank" rel="noopener">Facebook</a>{% endif %}
+          {% if r.x_url %}<a href="{{ r.x_url }}" target="_blank" rel="noopener">X</a>{% endif %}
+          {% if r.youtube_url %}<a href="{{ r.youtube_url }}" target="_blank" rel="noopener">YouTube</a>{% endif %}
+          {% if r.instagram_url %}<a href="{{ r.instagram_url }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% empty %}
+    <div class="empty card"><strong>Aucun responsable publié</strong>Les responsables apparaîtront ici dès leur publication.</div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
