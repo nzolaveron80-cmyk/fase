@@ -1,4 +1,4 @@
- /* =====================================================================
+/* =====================================================================
    FASE · UPC — feuille de style
    ===================================================================== */
 
@@ -53,7 +53,8 @@ body {
 }
 main.page { flex: 1; animation: pageIn .5s var(--ease) both; outline: none; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-a { color: var(--primary); text-underline-offset: 3px; }
+a { color: var(--primary); text-underline-offset: 3px; border: none; }
+a:hover { text-decoration: underline; }
 img { max-width: 100%; display: block; }
 h1, h2, h3 { margin: 0 0 .5em; line-height: 1.2; letter-spacing: -.01em; font-weight: 700; }
 h1 { font-size: clamp(2rem, 4.2vw, 2.9rem); }
@@ -86,10 +87,11 @@ ul { margin: 0; padding: 0; }
 }
 .btn svg { width: 16px; height: 16px; transition: transform .25s var(--ease); }
 .btn:hover svg { transform: translateX(3px); }
+.btn:hover { text-decoration: none; }
 .btn-primary { background: var(--primary); color: var(--on-primary); box-shadow: 0 8px 18px -10px var(--primary); }
 .btn-primary:hover { background: var(--primary-strong); transform: translateY(-1px); box-shadow: 0 12px 24px -12px var(--primary); }
 .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
-.btn-ghost:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.btn-ghost:hover { border-color: var(--border); color: var(--text); transform: translateY(-1px); }
 .btn:active { transform: translateY(0) scale(.98); }
 .btn-sm { padding: 7px 14px; font-size: .85rem; }
 button.btn { font: inherit; }
@@ -99,7 +101,7 @@ button.btn { font: inherit; }
   border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer;
   transition: border-color .2s, color .2s, background-color .2s;
 }
-.icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+.icon-btn:hover { border-color: var(--border); color: var(--text); background: var(--surface-2); }
 .icon-btn svg { width: 18px; height: 18px; }
 .icon-sun { display: none; }
 [data-theme="dark"] .icon-sun { display: block; }
@@ -114,6 +116,7 @@ button.btn { font: inherit; }
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 72px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); min-width: 0; }
+.brand:hover { text-decoration: none; }
 .brand img { width: 44px; height: 44px; border-radius: 10px; background: #000; padding: 3px; flex-shrink: 0; }
 .brand strong { display: block; font-size: .98rem; letter-spacing: -.01em; white-space: nowrap; }
 .brand span { display: block; font-size: .78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 380px; }
@@ -121,16 +124,15 @@ button.btn { font: inherit; }
 .header-actions { display: flex; align-items: center; gap: 8px; }
 .main-nav__head { display: none; }
 .main-nav ul { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
-.main-nav a {
-  display: block; padding: 8px 12px; border-radius: 999px;
+.main-nav a,
+.main-nav a:hover,
+.main-nav a[aria-current="page"] {
+  display: block; padding: 8px 12px; border-radius: 999px; border: none; box-shadow: none; outline: none;
   color: var(--muted); text-decoration: none; font-size: .92rem; font-weight: 500;
   transition: color .2s, background-color .2s;
 }
-.main-nav a:hover { color: var(--text); background: var(--surface-2); }
-.main-nav a[aria-current="page"] {
-  color: var(--primary); background: var(--primary-soft);
-  border-left: 3px solid var(--primary); border-radius: 0 999px 999px 0;
-}
+.main-nav a:hover { color: var(--text); background: var(--surface-2); text-decoration: none; }
+.main-nav a[aria-current="page"] { color: var(--text); background: var(--surface-2); font-weight: 600; }
 .menu-toggle { display: none; }
 .scrim {
   position: fixed; inset: 0; background: rgba(8, 12, 20, .45); opacity: 0; pointer-events: none;
@@ -178,9 +180,9 @@ button.btn { font: inherit; }
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
   padding: clamp(20px, 2.4vw, 28px); box-shadow: var(--shadow-sm);
-  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
-.card.interactive:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); }
+.card.interactive:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
 .news { display: flex; flex-direction: column; gap: 12px; }
@@ -200,9 +202,9 @@ button.btn { font: inherit; }
 .empty.card { padding: 40px 20px; }
 
 /* ---------- Accueil : citations, présidente, CTA ---------- */
-.quote-card { border-left: 3px solid var(--accent); }
+.quote-card { border: 1px solid var(--border); }
 .quote-card p { font-style: italic; color: var(--text); }
-.quote-card cite { font-style: normal; color: var(--primary); font-weight: 600; font-size: .9rem; }
+.quote-card cite { font-style: normal; color: var(--muted); font-weight: 600; font-size: .9rem; }
 .presidente { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: center; }
 @media (min-width: 860px) { .presidente { grid-template-columns: minmax(0, 320px) 1fr; } }
 .presidente-photo {
@@ -215,7 +217,7 @@ button.btn { font: inherit; }
 }
 .quote {
   font-size: clamp(1.12rem, 2vw, 1.35rem); line-height: 1.5; font-weight: 500;
-  border-left: 3px solid var(--accent); padding-left: 18px; margin: 18px 0 24px;
+  border-left: none; padding-left: 0; margin: 18px 0 24px;
 }
 .cta-card {
   margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
@@ -223,7 +225,7 @@ button.btn { font: inherit; }
 .cta-card h3 { margin: 0 0 4px; }
 
 /* ---------- Délégués ---------- */
-.promo-card { display: flex; flex-direction: column; gap: 6px; }
+.promo-card { display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border); }
 .promo-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
 .promo-card strong { font-size: 1rem; }
 .promo-card .pending { color: var(--muted); font-style: italic; font-weight: 500; }
@@ -233,7 +235,7 @@ button.btn { font: inherit; }
 .person { display: flex; flex-direction: column; gap: 6px; }
 .avatar {
   width: 76px; height: 76px; border-radius: 50%; flex-shrink: 0; margin-bottom: 8px;
-  object-fit: cover; border: 2px solid var(--primary); font-size: .72rem; text-align: center;
+  object-fit: cover; border: 1px solid var(--border); font-size: .72rem; text-align: center;
 }
 .meta { list-style: none; margin: 4px 0 0; color: var(--muted); font-size: .92rem; }
 .socials { display: flex; flex-wrap: wrap; gap: 10px; font-size: .86rem; margin-top: 6px; }
@@ -247,11 +249,11 @@ button.btn { font: inherit; }
 .segmented a {
   padding: 7px 14px; border-radius: 999px; color: var(--muted); text-decoration: none;
   font-size: .9rem; font-weight: 500; transition: background-color .2s, color .2s, box-shadow .2s;
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 6px; border: none;
 }
-.segmented a:hover { color: var(--text); }
+.segmented a:hover { color: var(--text); text-decoration: none; }
 .segmented a.is-active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); font-weight: 600; }
-.count { font-size: .72rem; background: var(--primary-soft); color: var(--primary); padding: 1px 7px; border-radius: 999px; }
+.count { font-size: .72rem; background: var(--surface-2); color: var(--muted); padding: 1px 7px; border-radius: 999px; }
 .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .field { position: relative; }
 .field svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
@@ -287,8 +289,8 @@ form.contact label { display: grid; gap: 6px; font-size: .9rem; font-weight: 600
 form.contact input, form.contact select, form.contact textarea { font-weight: 400; width: 100%; }
 form.contact textarea { min-height: 130px; resize: vertical; }
 .notice { padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface-2); font-size: .92rem; }
-.notice.ok { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-.notice.err { border-color: var(--carmin); color: var(--carmin); }
+.notice.ok { color: var(--primary); background: var(--primary-soft); }
+.notice.err { color: var(--carmin); background: var(--surface-2); }
 
 /* ---------- Pages légales ---------- */
 .legal h3 { margin-top: 1.4em; font-size: 1.04rem; }
@@ -298,8 +300,8 @@ form.contact textarea { min-height: 130px; resize: vertical; }
 .legal section + section { margin-top: 1.4em; }
 .legal .box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 18px; margin-top: 14px; }
 .legal .box h3 { margin: 0 0 6px; }
-.legal .notice { margin-top: 14px; color: var(--muted); border-left: 3px solid var(--accent); }
-.legal .legal-note { border-left: 3px solid var(--accent); padding: 10px 14px; background: var(--surface-2); border-radius: var(--radius-sm); font-size: .88rem; color: var(--muted); }
+.legal .notice { margin-top: 14px; color: var(--muted); }
+.legal .legal-note { padding: 10px 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: .88rem; color: var(--muted); }
 
 /* ---------- Pied de page ---------- */
 .site-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 56px 0 28px; margin-top: 48px; }
@@ -308,7 +310,7 @@ form.contact textarea { min-height: 130px; resize: vertical; }
 .footer-grid h4 { margin: 0 0 12px; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .footer-grid ul { list-style: none; display: grid; gap: 8px; }
 .footer-grid a { color: var(--text); text-decoration: none; font-size: .92rem; }
-.footer-grid a:hover { color: var(--primary); }
+.footer-grid a:hover { color: var(--text); text-decoration: underline; }
 .footer-base {
   display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: .85rem; color: var(--muted);
