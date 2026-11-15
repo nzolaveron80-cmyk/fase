@@ -1,4 +1,4 @@
-/* =====================================================================
+ /* =====================================================================
    FASE · UPC — feuille de style
    ===================================================================== */
 
@@ -127,7 +127,10 @@ button.btn { font: inherit; }
   transition: color .2s, background-color .2s;
 }
 .main-nav a:hover { color: var(--text); background: var(--surface-2); }
-.main-nav a[aria-current="page"] { color: var(--primary); background: var(--primary-soft); }
+.main-nav a[aria-current="page"] {
+  color: var(--primary); background: var(--primary-soft);
+  border-left: 3px solid var(--primary); border-radius: 0 999px 999px 0;
+}
 .menu-toggle { display: none; }
 .scrim {
   position: fixed; inset: 0; background: rgba(8, 12, 20, .45); opacity: 0; pointer-events: none;
@@ -351,7 +354,6 @@ form.contact textarea { min-height: 130px; resize: vertical; }
   .main-nav__head strong { font-size: 1rem; }
   .main-nav ul { flex-direction: column; gap: 4px; }
   .main-nav a { font-size: 1rem; padding: 13px 14px; border-radius: 12px; }
-  .main-nav a[aria-current="page"] { box-shadow: inset 3px 0 0 var(--primary); }
   body.menu-open { overflow: hidden; }
 }
 
