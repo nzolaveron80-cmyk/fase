@@ -30,6 +30,12 @@
 
       <div class="nav-wrap">
         <nav class="main-nav" id="mainNav" aria-label="Navigation principale">
+          <div class="main-nav__head">
+            <strong>Menu</strong>
+            <button class="icon-btn" id="menuClose" type="button" aria-label="Fermer le menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
           <ul>
             <li><a href="{% url 'accueil' %}" {% if request.resolver_match.url_name == 'accueil' %}aria-current="page"{% endif %}>Accueil</a></li>
             <li><a href="{% url 'cours' %}" {% if request.resolver_match.url_name == 'cours' %}aria-current="page"{% endif %}>Cours</a></li>
@@ -52,8 +58,8 @@
         </div>
       </div>
     </div>
+    <div class="scrim" id="scrim"></div>
   </header>
-  <div class="scrim" id="scrim"></div>
 
   <main id="contenu" tabindex="-1" class="page">
     {% block content %}{% endblock %}
